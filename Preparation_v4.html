@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Civil Services Tracker 2026</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --accent: #8b5cf6;
+            --secondary: #10b981;
+            --border: #334155;
+            --progress-bg: #475569;
+            --danger: #ef4444;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: auto; }
+        h1 { text-align: center; color: var(--accent); margin-bottom: 5px; }
+        .date-strip { text-align: center; font-size: 0.9rem; color: #94a3b8; margin-bottom: 25px; }
+        
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .tab-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .content-section { display: none; background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .content-section.active { display: block; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+        th { background: #0f172a; color: var(--secondary); font-size: 0.85rem; text-transform: uppercase; }
+
+        .progress-container { display: flex; align-items: center; gap: 10px; }
+        .progress-bg { flex-grow: 1; background: var(--progress-bg); height: 12px; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.4s ease; }
+        
+        input[type="number"] { width: 55px; background: #0f172a; border: 1px solid var(--border); color: white; padding: 6px; border-radius: 4px; text-align: center; }
+        input[type="text"], textarea, select { width: 95%; background: #0f172a; border: 1px solid var(--border); color: white; padding: 8px; border-radius: 4px; }
+        textarea { resize: vertical; min-height: 60px; }
+
+        .status-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-right: 4px; display: inline-block; }
+        .upsc { border: 1px solid #38bdf8; color: #38bdf8; }
+        .opsc { border: 1px solid #fbbf24; color: #fbbf24; }
+        .ossc { border: 1px solid #f472b6; color: #f472b6; }
+
+        #saveNotice { position: fixed; bottom: 25px; right: 25px; background: var(--secondary); color: #000; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: bold; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Strategic Civil Services Tracker 2026</h1>
+    <div class="date-strip">
+        📅 OSSC CGL: <strong>12 April</strong> | UPSC Prelims: <strong>24 May</strong> | OPSC Prelims: <strong>07 June</strong>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('daily')">Daily Master Plan</button>
+        <button class="tab-btn" onclick="openTab('mastery')">Topic Completion Mastery</button>
+        <button class="tab-btn" onclick="openTab('mock')">Mock Analysis</button>
+        <button class="tab-btn" onclick="openTab('backlog')">Backlog</button>
+    </div>
+
+    <div id="daily" class="content-section active">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:15%">Time Slot</th>
+                    <th style="width:25%">Subject Focus</th>
+                    <th>Specific Task / Target</th>
+                    <th style="width:8%">Done?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>05:00 - 07:00</td>
+                    <td>History/Polity (Weak Areas)</td>
+                    <td><input type="text" id="d_s1_t" class="store" placeholder="e.g., Maratha Empire / Fundamental Rights"></td>
+                    <td><input type="checkbox" id="d_s1_c" class="store"></td>
+                </tr>
+                <tr>
+                    <td>09:00 - 12:00</td>
+                    <td>Core GS (Common)</td>
+                    <td><input type="text" id="d_s2_t" class="store" placeholder="e.g., Banking & Monetary Policy"></td>
+                    <td><input type="checkbox" id="d_s2_c" class="store"></td>
+                </tr>
+                <tr>
+                    <td>15:00 - 16:30</td>
+                    <td>Math / Aptitude / Comprehension</td>
+                    <td><input type="text" id="d_s3_t" class="store" placeholder="e.g., Percentage / Critical Reasoning"></td>
+                    <td><input type="checkbox" id="d_s3_c" class="store"></td>
+                </tr>
+                <tr>
+                    <td>18:30 - 21:00</td>
+                    <td>2hr Revision + CA</td>
+                    <td><input type="text" id="d_s4_t" class="store" placeholder="Summary of the day + National/Odisha CA"></td>
+                    <td><input type="checkbox" id="d_s4_c" class="store"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="mastery" class="content-section">
+        <h3>Syllabus Completion Tracker</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:20%">Exam Context</th>
+                    <th>Syllabus Topic</th>
+                    <th style="width:35%">Visual Progress</th>
+                    <th style="width:12%">% Mastered</th>
+                </tr>
+            </thead>
+            <tbody id="masteryBody">
+                </tbody>
+        </table>
+    </div>
+
+    <div id="mock" class="content-section">
+        <h3>Exam Mock & Error Logs</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:12%">Date</th>
+                    <th style="width:15%">Exam Type</th>
+                    <th style="width:10%">Score</th>
+                    <th>Concept Errors (Weakness)</th>
+                    <th>Silly/Time Errors</th>
+                    <th>Action Item</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" id="m1_d" class="store" placeholder="08/03"></td>
+                    <td><select id="m1_ex" class="store"><option>OSSC CGL</option><option>UPSC Prelims</option><option>OPSC CSE</option></select></td>
+                    <td><input type="text" id="m1_sc" class="store"></td>
+                    <td><textarea id="m1_ce" class="store"></textarea></td>
+                    <td><input type="text" id="m1_se" class="store"></td>
+                    <td><input type="text" id="m1_fi" class="store"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="backlog" class="content-section">
+        <h3>Priority Backlog</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:12%">Priority</th>
+                    <th>Topic Description</th>
+                    <th style="width:20%">Source</th>
+                    <th style="width:15%">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><select id="b1_p" class="store"><option>High</option><option>Medium</option><option>Low</option></select></td>
+                    <td><input type="text" id="b1_t" class="store" placeholder="Odisha History: Somavamsi & Ganga Dynasty"></td>
+                    <td><input type="text" id="b1_s" class="store" placeholder="Odisha Year Book"></td>
+                    <td><select id="b1_st" class="store"><option>Pending</option><option>In Progress</option><option>Revised</option></select></td>
+                </tr>
+                <tr>
+                    <td><select id="b2_p" class="store"><option>High</option><option>Medium</option><option>Low</option></select></td>
+                    <td><input type="text" id="b2_t" class="store" placeholder="Backlog: Environmental Conventions (Climate Change)"></td>
+                    <td><input type="text" id="b2_s" class="store" placeholder="Shankar IAS / Notes"></td>
+                    <td><select id="b2_st" class="store"><option>Pending</option><option>In Progress</option><option>Revised</option></select></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="saveNotice">Data Synced to Storage</div>
+
+<script>
+    const topics = [
+        { tags: ['UPSC', 'OPSC', 'OSSC'], name: 'Current Events (National & International)' },
+        { tags: ['UPSC', 'OPSC'], name: 'History of India & National Movement' },
+        { tags: ['OPSC', 'OSSC'], name: 'History of Odisha & Odia Nationalism' },
+        { tags: ['UPSC', 'OPSC'], name: 'Physical, Social, Economic Geography (India/World)' },
+        { tags: ['OPSC', 'OSSC'], name: 'Odisha Geography & Mineral Distribution' },
+        { tags: ['UPSC', 'OPSC'], name: 'Polity: Constitution & Political System' },
+        { tags: ['UPSC', 'OPSC'], name: 'Panchayati Raj & Public Policy' },
+        { tags: ['UPSC', 'OPSC'], name: 'Economic & Social Dev (Sustainable Dev, Poverty)' },
+        { tags: ['OSSC'], name: 'Odisha Economy & Heritage' },
+        { tags: ['UPSC', 'OPSC'], name: 'Environment, Bio-diversity, Climate Change' },
+        { tags: ['UPSC', 'OPSC', 'OSSC'], name: 'General Science' },
+        { tags: ['OSSC'], name: 'Computer & Internet Awareness' },
+        { tags: ['UPSC', 'OPSC'], name: 'Comprehension & Interpersonal Skills' },
+        { tags: ['UPSC', 'OPSC', 'OSSC'], name: 'Logical Reasoning & Analytical Ability' },
+        { tags: ['UPSC', 'OPSC', 'OSSC'], name: 'Basic Numeracy & DI (Class X Level)' },
+        { tags: ['UPSC', 'OPSC'], name: 'Decision Making & Problem Solving' }
+    ];
+
+    function renderMastery() {
+        const tbody = document.getElementById('masteryBody');
+        topics.forEach((topic, index) => {
+            const row = document.createElement('tr');
+            const tagHTML = topic.tags.map(t => `<span class="status-badge ${t.toLowerCase()}">${t}</span>`).join('');
+            
+            row.innerHTML = `
+                <td>${tagHTML}</td>
+                <td style="font-size: 0.9rem;">${topic.name}</td>
+                <td>
+                    <div class="progress-container">
+                        <div class="progress-bg">
+                            <div id="bar_${index}" class="progress-fill" style="background: ${getBarColor(0)}"></div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input type="number" id="val_${index}" class="store-prog" min="0" max="100" value="0" oninput="updateBar(${index}, this.value)">
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function getBarColor(val) {
+        if (val < 35) return '#ef4444';
+        if (val < 75) return '#f59e0b';
+        return '#10b981';
+    }
+
+    function updateBar(index, val) {
+        const bar = document.getElementById(`bar_${index}`);
+        bar.style.width = val + '%';
+        bar.style.background = getBarColor(val);
+        localStorage.setItem(`prog_val_${index}`, val);
+        showSave();
+    }
+
+    function openTab(tabId) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function showSave() {
+        const notice = document.getElementById('saveNotice');
+        notice.style.display = 'block';
+        setTimeout(() => notice.style.display = 'none', 1000);
+    }
+
+    window.onload = () => {
+        renderMastery();
+        
+        document.querySelectorAll('.store').forEach(el => {
+            const saved = localStorage.getItem(el.id);
+            if (saved) {
+                if (el.type === 'checkbox') el.checked = saved === 'true';
+                else el.value = saved;
+            }
+            el.addEventListener('input', () => {
+                const val = el.type === 'checkbox' ? el.checked : el.value;
+                localStorage.setItem(el.id, val);
+                showSave();
+            });
+        });
+
+        topics.forEach((_, index) => {
+            const savedVal = localStorage.getItem(`prog_val_${index}`) || 0;
+            const input = document.getElementById(`val_${index}`);
+            if(input) {
+                input.value = savedVal;
+                updateBar(index, savedVal);
+            }
+        });
+    };
+</script>
+</body>
+</html>
