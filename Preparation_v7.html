@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Civil Services Tracker 2026</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --accent: #8b5cf6;
+            --secondary: #10b981;
+            --border: #334155;
+            --progress-bg: #334155;
+            --upsc-color: #38bdf8;
+            --opsc-color: #fbbf24;
+            --ossc-color: #f472b6;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
+        .container { max-width: 1200px; margin: auto; }
+        h1 { text-align: center; color: var(--accent); margin-bottom: 5px; }
+        .date-strip { text-align: center; font-size: 0.9rem; color: #94a3b8; margin-bottom: 25px; }
+        
+        /* Tabs */
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .tab-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 12px 20px; cursor: pointer; border-radius: 6px; transition: 0.2s; font-weight: 500; }
+        .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .content-section { display: none; background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .content-section.active { display: block; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+        th { background: #0f172a; color: var(--secondary); font-size: 0.85rem; text-transform: uppercase; }
+
+        /* Mastery/Accordion */
+        .mastery-row { cursor: pointer; transition: background 0.2s; }
+        .mastery-row:hover { background: #242f44; }
+        .details-container { display: none; background: #0f172a; padding: 15px; border-left: 4px solid var(--accent); }
+        .details-container.open { display: block; }
+        .sub-topic-item { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; padding: 8px 0; border-bottom: 1px solid #1e293b; }
+        .sub-topic-name { flex: 2; font-size: 0.85rem; color: #cbd5e1; }
+        .sub-slider { flex: 1; accent-color: var(--secondary); cursor: pointer; }
+
+        /* Form Elements */
+        input[type="text"], textarea, select { width: 95%; background: #0f172a; border: 1px solid var(--border); color: white; padding: 8px; border-radius: 4px; font-family: inherit; }
+        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--secondary); cursor: pointer; }
+        textarea { min-height: 60px; resize: vertical; }
+
+        /* Progress Bars */
+        .progress-bg { background: var(--progress-bg); height: 12px; border-radius: 10px; overflow: hidden; width: 100%; position: relative; }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.4s ease; }
+        .perc-label { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; display: block; }
+
+        /* Badges & Filters */
+        .status-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-right: 4px; display: inline-block; }
+        .upsc { border: 1px solid var(--upsc-color); color: var(--upsc-color); }
+        .opsc { border: 1px solid var(--opsc-color); color: var(--opsc-color); }
+        .ossc { border: 1px solid var(--ossc-color); color: var(--ossc-color); }
+
+        .filter-container { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; }
+        .filter-pill { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; font-size: 0.75rem; transition: 0.2s; }
+        .filter-pill.active[data-exam="UPSC"] { background: var(--upsc-color); color: #000; border-color: var(--upsc-color); }
+        .filter-pill.active[data-exam="OPSC"] { background: var(--opsc-color); color: #000; border-color: var(--opsc-color); }
+        .filter-pill.active[data-exam="OSSC"] { background: var(--ossc-color); color: #000; border-color: var(--ossc-color); }
+
+        #saveNotice { position: fixed; bottom: 25px; right: 25px; background: var(--secondary); color: #000; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: bold; display: none; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Strategic Civil Services Tracker 2026</h1>
+    <div class="date-strip">
+        📅 OSSC CGL: <strong>12 April</strong> | UPSC Prelims: <strong>24 May</strong> | OPSC Prelims: <strong>07 June</strong>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('daily')">Daily Master Plan</button>
+        <button class="tab-btn" onclick="openTab('mastery')">Topic Completion Mastery</button>
+        <button class="tab-btn" onclick="openTab('mock')">Mock Analysis</button>
+        <button class="tab-btn" onclick="openTab('backlog')">Backlog</button>
+    </div>
+
+    <div id="daily" class="content-section active">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:15%">Time Slot</th>
+                    <th style="width:25%">Subject Focus</th>
+                    <th>Specific Task / Target</th>
+                    <th style="width:8%">Done?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>05:00 - 07:00</td>
+                    <td>History/Polity (Weak)</td>
+                    <td><input type="text" id="d_s1_t" class="store" placeholder="e.g., Laxmikanth Fundamental Rights"></td>
+                    <td><input type="checkbox" id="d_s1_c" class="store"></td>
+                </tr>
+                <tr>
+                    <td>09:00 - 12:00</td>
+                    <td>Core GS (Common)</td>
+                    <td><input type="text" id="d_s2_t" class="store" placeholder="e.g., Physical Geography"></td>
+                    <td><input type="checkbox" id="d_s2_c" class="store"></td>
+                </tr>
+                <tr>
+                    <td>15:00 - 16:30</td>
+                    <td>Math / Aptitude / Comp</td>
+                    <td><input type="text" id="d_s3_t" class="store" placeholder="e.g., Percentages / Logical Reasoning"></td>
+                    <td><input type="checkbox" id="d_s3_c" class="store"></td>
+                </tr>
+                <tr>
+                    <td>18:30 - 21:00</td>
+                    <td>2hr Revision + CA</td>
+                    <td><input type="text" id="d_s4_t" class="store" placeholder="Daily summary + National/Odisha CA"></td>
+                    <td><input type="checkbox" id="d_s4_c" class="store"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="mastery" class="content-section">
+        <div class="filter-container">
+            <span style="font-size: 0.8rem; color: #94a3b8;">Filter:</span>
+            <button class="filter-pill active" data-exam="UPSC" onclick="toggleFilter(this)">UPSC</button>
+            <button class="filter-pill active" data-exam="OPSC" onclick="toggleFilter(this)">OPSC</button>
+            <button class="filter-pill active" data-exam="OSSC" onclick="toggleFilter(this)">OSSC</button>
+        </div>
+
+        <table id="masteryTable">
+            <thead>
+                <tr>
+                    <th style="width:20%">Exam Context</th>
+                    <th style="width:45%">Syllabus Topic (Click to Expand)</th>
+                    <th>Visual Progress</th>
+                </tr>
+            </thead>
+            <tbody id="masteryBody"></tbody>
+        </table>
+    </div>
+
+    <div id="mock" class="content-section">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:12%">Date</th>
+                    <th style="width:15%">Exam Type</th>
+                    <th style="width:10%">Score</th>
+                    <th>Concept Errors</th>
+                    <th>Silly Errors</th>
+                    <th>Action Item</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" id="m1_d" class="store" placeholder="05/03"></td>
+                    <td><select id="m1_ex" class="store"><option>OSSC CGL</option><option>UPSC Prelims</option><option>OPSC CSE</option></select></td>
+                    <td><input type="text" id="m1_sc" class="store"></td>
+                    <td><textarea id="m1_ce" class="store"></textarea></td>
+                    <td><input type="text" id="m1_se" class="store"></td>
+                    <td><input type="text" id="m1_fi" class="store"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="backlog" class="content-section">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:12%">Priority</th>
+                    <th>Topic Description</th>
+                    <th style="width:20%">Source</th>
+                    <th style="width:15%">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><select id="b1_p" class="store"><option>High</option><option>Medium</option><option>Low</option></select></td>
+                    <td><input type="text" id="b1_t" class="store" placeholder="Odisha History: Somavamsi Dynasty"></td>
+                    <td><input type="text" id="b1_s" class="store"></td>
+                    <td><select id="b1_st" class="store"><option>Pending</option><option>In Progress</option><option>Revised</option></select></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="saveNotice">Data Synced Successfully</div>
+
+<script>
+    const topicsData = [
+        { id: 'ca', tags: ['UPSC', 'OPSC', 'OSSC'], name: 'Current Events (National & International)', subs: ['National Schemes', 'International Summits', 'Odisha CA', 'Science & Tech News'] },
+        { id: 'hist', tags: ['UPSC', 'OPSC'], name: 'History of India & National Movement', subs: ['Ancient (Indus/Vedic)', 'Medieval (Delhi/Mughal)', 'Modern (1857-1947)', 'Art & Culture'] },
+        { id: 'ohist', tags: ['OPSC', 'OSSC'], name: 'History of Odisha & Odia Nationalism', subs: ['Ancient Odisha', 'Somavamsi/Ganga', 'British Rule in Odisha', 'Odia Movement'] },
+        { id: 'geo', tags: ['UPSC', 'OPSC'], name: 'Physical, Social, Economic Geography', subs: ['Geomorphology', 'Indian Climate', 'World Economic Geo', 'Mapping'] },
+        { id: 'ogeo', tags: ['OPSC', 'OSSC'], name: 'Odisha Geography & Minerals', subs: ['Rivers & Dams', 'Mineral Resources', 'Odisha Forests', 'Physiography'] },
+        { id: 'polity', tags: ['UPSC', 'OPSC'], name: 'Polity: Constitution & System', subs: ['Fundamental Rights', 'Parliament', 'Executive', 'Panchayati Raj'] },
+        { id: 'eco', tags: ['UPSC', 'OPSC'], name: 'Economic & Social Development', subs: ['Inflation/Banking', 'Sustainable Dev', 'Budget & Survey', 'Odisha Economy'] },
+        { id: 'env', tags: ['UPSC', 'OPSC'], name: 'Environment, Bio-diversity, Climate', subs: ['Ecology Principles', 'Pollution', 'Conventions/Treaties', 'Protected Areas'] },
+        { id: 'sci', tags: ['UPSC', 'OPSC', 'OSSC'], name: 'General Science', subs: ['Biology (Health/Disease)', 'Physics Concepts', 'Chemistry (Daily Life)'] },
+        { id: 'math', tags: ['UPSC', 'OPSC', 'OSSC'], name: 'Basic Numeracy & DI', subs: ['Arithmetic (OSSC Speed)', 'Number System', 'Data Interpretation', 'Algebra/Geometry'] },
+        { id: 'logic', tags: ['UPSC', 'OPSC', 'OSSC'], name: 'Logical Reasoning & Mental Ability', subs: ['Analytical Ability', 'Puzzles', 'Series/Coding', 'Decision Making'] },
+        { id: 'comp', tags: ['UPSC', 'OPSC'], name: 'Comprehension & Interpersonal Skills', subs: ['Logical Inference', 'Reading Speed', 'Vocabulary Usage'] },
+        { id: 'it', tags: ['OSSC'], name: 'Computer & Internet Awareness', subs: ['Hardware/Software', 'Networking', 'Cyber Security', 'Office Productivity'] }
+    ];
+
+    let activeFilters = ['UPSC', 'OPSC', 'OSSC'];
+
+    function renderMastery() {
+        const tbody = document.getElementById('masteryBody');
+        tbody.innerHTML = '';
+        
+        const filtered = topicsData.filter(t => t.tags.some(tag => activeFilters.includes(tag)));
+
+        filtered.forEach(topic => {
+            const avg = calculateParentProgress(topic);
+            const tagHTML = topic.tags.map(t => `<span class="status-badge ${t.toLowerCase()}">${t}</span>`).join('');
+            
+            const row = `
+                <tr class="mastery-row" onclick="toggleAccordion('${topic.id}')">
+                    <td>${tagHTML}</td>
+                    <td><strong>${topic.name}</strong></td>
+                    <td>
+                        <div class="progress-bg">
+                            <div id="pfill_${topic.id}" class="progress-fill" style="width: ${avg}%; background: ${getBarColor(avg)}"></div>
+                        </div>
+                        <span id="plabel_${topic.id}" class="perc-label">${avg}% Mastered</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="padding:0">
+                        <div id="child_${topic.id}" class="details-container">
+                            ${topic.subs.map((sub, i) => {
+                                const subVal = localStorage.getItem(`sub_${topic.id}_${i}`) || 0;
+                                return `
+                                    <div class="sub-topic-item">
+                                        <div class="sub-topic-name">${sub}</div>
+                                        <input type="range" class="sub-slider" min="0" max="100" value="${subVal}" 
+                                               oninput="updateSubProgress('${topic.id}', ${i}, this.value)" onclick="event.stopPropagation()">
+                                        <span style="font-size:0.8rem; width:40px; text-align:right">${subVal}%</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    function updateSubProgress(topicId, subIdx, val) {
+        localStorage.setItem(`sub_${topicId}_${subIdx}`, val);
+        const topic = topicsData.find(t => t.id === topicId);
+        const newAvg = calculateParentProgress(topic);
+        
+        document.getElementById(`pfill_${topicId}`).style.width = newAvg + '%';
+        document.getElementById(`pfill_${topicId}`).style.background = getBarColor(newAvg);
+        document.getElementById(`plabel_${topicId}`).innerText = newAvg + '% Mastered';
+        
+        event.target.nextElementSibling.innerText = val + '%';
+        showSave();
+    }
+
+    function calculateParentProgress(topic) {
+        let total = 0;
+        topic.subs.forEach((_, i) => total += parseInt(localStorage.getItem(`sub_${topic.id}_${i}`) || 0));
+        return Math.round(total / topic.subs.length);
+    }
+
+    function getBarColor(val) {
+        if (val < 35) return '#ef4444';
+        if (val < 75) return '#f59e0b';
+        return '#10b981';
+    }
+
+    function toggleAccordion(id) {
+        const target = document.getElementById(`child_${id}`);
+        const isOpen = target.classList.contains('open');
+        document.querySelectorAll('.details-container').forEach(d => d.classList.remove('open'));
+        if (!isOpen) target.classList.add('open');
+    }
+
+    function toggleFilter(btn) {
+        const exam = btn.getAttribute('data-exam');
+        btn.classList.toggle('active');
+        activeFilters = Array.from(document.querySelectorAll('.filter-pill.active')).map(b => b.dataset.exam);
+        renderMastery();
+    }
+
+    function openTab(id) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function showSave() {
+        const n = document.getElementById('saveNotice');
+        n.style.display = 'block';
+        setTimeout(() => n.style.display = 'none', 1000);
+    }
+
+    window.onload = () => {
+        renderMastery();
+        document.querySelectorAll('.store').forEach(el => {
+            const saved = localStorage.getItem(el.id);
+            if (saved) {
+                if (el.type === 'checkbox') el.checked = saved === 'true';
+                else el.value = saved;
+            }
+            el.addEventListener('input', () => {
+                localStorage.setItem(el.id, el.type === 'checkbox' ? el.checked : el.value);
+                showSave();
+            });
+        });
+    };
+</script>
+</body>
+</html>
