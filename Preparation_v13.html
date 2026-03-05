@@ -285,8 +285,8 @@
                     </select></td>
                     <td><input type="number" placeholder="%" value="${mock.score}" oninput="updateMock(${i}, 'score', this.value)"></td>
                     <td><textarea oninput="updateMock(${i}, 'ce', this.value)" rows="1">${mock.ce}</textarea></td>
-                    <td><input type="text" value="${mock.se}" oninput="updateMock(${i}, 'se', this.value)"></td>
-                    <td><input type="text" value="${mock.action}" oninput="updateMock(${i}, 'action', this.value)"></td>
+                    <td><textarea oninput="updateMock(${i}, 'se', this.value)" rows="1">${mock.se}</textarea></td>
+                    <td><textarea oninput="updateMock(${i}, 'action', this.value)" rows="1">${mock.action}</textarea></td>
                 </tr>
             `);
         });
